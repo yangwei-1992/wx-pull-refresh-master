@@ -1,0 +1,68 @@
+<!--支持下拉刷新-上拉加载的组件-->
+
+<!-- 
+	bindrefresherrefresh  自定义下拉刷新被触发      下拉距离达不到刷新的距离，出发不了refresh
+	bindrefresherpulling  自定义下拉刷新控件被下拉	 有下拉动作即触发
+	bindrefresherrestore  自定义下拉刷新被复位
+	bindscrolltoupper     滚动到顶部/左边时触发
+	bindscrolltolower     滚动到底部/右边时触发
+
+	refresher-triggered   设置当前下拉刷新状态，true 表示下拉刷新已经被触发，false 表示下拉刷新未被触发===下拉刷新需手动置false
+
+	<scroll-view  class="communicate-c" scroll-y scroll-into-view='{{toView}}' style='height: {{scrollHeight}};' refresher-enabled="true" bindrefresherrefresh="onfresh" refresher-triggered="{{triggered}}">
+ -->
+<scroll-view class="prv-container"
+ scroll-y="{{scrollY}}"
+ refresher-enabled="{{refresherEnable}}"
+ bindrefresherrefresh="_onRefresh"
+ refresher-triggered="{{refreshing}}"
+ bindscrolltolower="_onLoadmore"
+ bindrefresherpulling="_onPulling"
+ refresher-default-style="none"
+ bindrefresherrestore="_onClose"
+ bindscrolltoupper="_onScrollTop"
+ refresher-threshold="{{pullDownHeight}}"
+ scroll-into-view="{{scrollToView}}"
+ scroll-with-animation="{{scrollWithAnimation}}"
+ scroll-top="{{scrollTop}}"
+ bindscroll="_onScroll">
+
+	<slot slot="refresher" name="refresher" wx:if="{{refresherType=='custom'}}"></slot>
+	<view slot="refresher" class="prv-pulldown" style="height:{{pullDownHeight}}px;line-height:{{pullDownHeight}}px;" wx:else>
+		<view wx:if="{{refresherType=='default'}}">
+			<block wx:if="{{pullState==0||pullState==1}}">
+				<view class="prv-pull-icon" style='transform:rotate({{pullState==0?0:180}}deg);'></view>
+				<text wx:if="{{pullState==0}}"> {{pullText}}</text>
+				<text wx:if="{{pullState==1}}" space="nbsp"> {{releaseText}}</text>
+			</block>
+			<block wx:if="{{pullState==2}}">
+				<view class="prv-loading"></view><text> {{refreshText}}</text>
+			</block>
+		</view>
+		<view wx:elif="{{refresherType=='circle'}}" class="prv-loading prv-dot-loading">
+		</view>
+	</view>
+	<slot></slot>
+
+	<!-- 无数据时 -->
+	<view wx:if="{{emptyShow&&isEmpty}}" class="empty">
+		<image class="empty__image" src="{{emptyUrl}}"></image>
+		<view class="empty__text">{{emptyText}}</view>
+	</view>
+
+	<!-- 自定义  加载中，没有更多数据 -->
+	<slot name="loader" wx:if="{{loadType=='custom'&&!isEmpty&&showLoading}}"></slot>
+	<!-- 加载中  没有更多数据 -->
+	<view class="prv-loadmore" wx:elif="{{loadType=='default'&&!isEmpty&&showLoading}}">
+		<!-- 没有更多数据 -->
+		<block wx:if="{{nomore}}">
+			<text>{{nomoreText}}</text>
+		</block>
+		<!-- 加载中 -->
+		<block wx:elif="{{!nomore&&requesting}}">
+			<view class="prv-loading"></view><text> {{loadmoreText}}</text>
+		</block>
+	</view>
+
+	<view style="width:2rpx;height:2rpx;bottom:-2rpx;position:absolute;" />
+</scroll-view>

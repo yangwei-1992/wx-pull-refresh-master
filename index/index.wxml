@@ -1,0 +1,47 @@
+
+<!-- <view class="header">下拉刷新组件</view> -->
+
+<!-- 默认样式 -->
+<pull-refresh-view
+  style="margin-top: 100px; height: 400px; border: 1px solid #000;"
+  refreshing="{{isRefreshing}}"
+  bindonrefresh="onRefresh"
+  bindloadmore="onLoadMore"
+  requesting="{{requesting}}"
+  nomore="{{isFinish}}"
+  loadmoreText="加载中..."
+  isEmpty="{{ isEmpty }}"
+  emptyUrl="https://oss.hqt.cjn.cn/hqt/pair-qsy.png"
+  emptyText="暂无数据"
+  scrollTop="{{scrollTop}}">
+  <block wx:for="{{dataList}}">
+    <view class="item">
+      <text>{{item.name}}</text>
+    </view>
+  </block>
+</pull-refresh-view> 
+
+
+
+<!-- 自定义下拉刷新样式和加载样式 -->
+<!-- <pull-refresh-view
+  bindonrefresh="onRefresh"
+  refreshing="{{isRefreshing}}"
+  bindloadmore="onLoadMore"
+  nomore="{{isFinish}}"
+  pullText="下拉可以刷新"
+  refresherType="custom"
+  loadType="custom"
+  bindonpulling="onPulling">
+  <view slot="refresher" class="custom-pull-down">
+    -- 自定义下拉刷新 --
+	</view>
+	<block wx:for="{{dataList}}" wx:key>
+		<view class="item">
+				<text>{{item.name}}</text>
+		</view>
+	</block>
+  <view slot="loader" class="custom-loader">
+    -- 自定义加载动画 --
+	</view>
+</pull-refresh-view> -->
